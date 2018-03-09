@@ -1,21 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ReactDOM from 'react-dom';
+import YTSearch from 'youtube-api-search';
+import SearchBar from './components/search_bar';
+import VideoList from './components/video_list';
+import VideoDetail from './components/video_detail';
+const API_KEY = 'AIzaSyCVMSP_4bFcKpYTFNE1ZxtZ0e7jFCuj3oE';
+
+// Create a new component. This component should produce
+// some HTML
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            videos: []
+        }
+
+        YTSearch({ key: API_KEY, term: 'surfboards'}, (videos) => {
+                this.setState({ videos });
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                <SearchBar />
+                <VideoDetail video={this.state.videos[0]}/>
+                <VideoList videos={this.state.videos} />
+            </div>
+        );
+    }
 }
+
+// Take this component's generated HTML and put it
+// on the page (in Dom)
 
 export default App;
